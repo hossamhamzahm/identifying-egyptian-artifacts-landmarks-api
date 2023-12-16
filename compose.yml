@@ -1,0 +1,7 @@
+services:
+  gard-flask-api:
+    build: .
+    ports:
+      - "5000:5000"
+  # db:
+  #   image: "redis:alpine"

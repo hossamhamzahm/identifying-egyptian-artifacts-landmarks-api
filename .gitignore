@@ -1,0 +1,6 @@
+__pycache__
+test.py
+data_set
+params_with_02_drop_out
+uploaded_imgs
+# SQLAlchemy==1.3.18
