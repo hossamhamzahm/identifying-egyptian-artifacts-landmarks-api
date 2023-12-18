@@ -1,9 +1,10 @@
-from flask import Flask, request
+from flask import Flask
+from flask_cors import CORS
 from predict_endpoint import img_bp
 from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.errorhandler(HTTPException)
 def handle_bad_request(e):
