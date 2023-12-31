@@ -9,5 +9,5 @@ ENV FLASK_RUN_HOST=0.0.0.0
 COPY . .
 RUN mkdir uploaded_imgs
 RUN pip3 install -r requirements.txt
-CMD ["flask", "run"]
+CMD ["flask", "run", "--cert=cert/fullchain.pem", "--key=cert/privkey.pem"]
 EXPOSE 5000

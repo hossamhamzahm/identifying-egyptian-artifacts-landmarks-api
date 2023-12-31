@@ -1,8 +1,10 @@
 from database import engine
 from Artifact import Artifact
 from sqlalchemy.orm import Session
+from SchemaBase import Base
 import os
 import json
+
 
 
 
@@ -30,6 +32,7 @@ def load_artifacts():
                     [description, description_src] = info_f.readlines()
                     description = description.strip()
                     description_src = description_src.strip()
+                    description_src = description_src.split(' ')[1]
 
             artifact =  Artifact(name=classes[id], cnn_id=eval(id), type="artifact", description=description, description_src=description_src)
             artifacts.append(artifact)
@@ -52,15 +55,15 @@ def read_artifacts():
 
 
 if __name__ == "__main__":
-    # drop_artifacts()
-    # Base.metadata.create_all(engine)
+    drop_artifacts()
+    Base.metadata.create_all(engine)
 
-    # load_artifacts()
-    # seed_artifacts()
+    load_artifacts()
+    seed_artifacts()
+    artifact =  Artifact(name="Unknown", cnn_id=-1, type="artifact", description="Undetected class. Please upload a clearer image.")
+    with Session(engine) as session:
+            session.add(artifact)
+            session.commit()
 
 
-    # artifact =  Artifact(name="Unknown", cnn_id=-1, type="artifact", description="Undetected class. Please upload a clearer image.")
-    # with Session(engine) as session:
-    #         session.add(artifact)
-    #         session.commit()
-    read_artifacts()
+    # read_artifacts()
