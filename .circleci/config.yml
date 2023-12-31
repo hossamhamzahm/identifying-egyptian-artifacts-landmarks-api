@@ -1,0 +1,20 @@
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/openjdk:19.0.1
+    steps:
+      - checkout
+
+      - add_ssh_keys:
+          fingerprints:
+            - "82:c7:cb:17:c7:59:2d:7b:b3:ab:db:22:e7:60:31:6c"
+      - run:
+          command: ssh -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cd identifying-egyptian-artifacts-landmarks-api && git pull origin main && docker-compose down && docker-compose up"
+          name: Pull & Spin
+
+workflows:
+  build:
+    jobs:
+      - deploy

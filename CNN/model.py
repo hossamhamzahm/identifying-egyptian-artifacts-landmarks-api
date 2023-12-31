@@ -4,58 +4,49 @@ import torchvision.datasets as datasets # to download dataset form mnisc
 import torchvision.transforms as transforms
 import os
 from PIL import Image
-
+import json
 
 def predict(test_image_name):
-    image_transforms = { 
-        'train': transforms.Compose([
-            transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)),
-            transforms.RandomRotation(degrees=15),
-            transforms.RandomHorizontalFlip(),
-            transforms.CenterCrop(size=224),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406],
-                                [0.229, 0.224, 0.225])
-        ]),
-        'valid': transforms.Compose([
-            transforms.Resize(size=256),
-            transforms.CenterCrop(size=224),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406],
-                                [0.229, 0.224, 0.225])
-        ]),
-        'test': transforms.Compose([
-            transforms.Resize(size=256),
-            transforms.CenterCrop(size=224),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406],
-                                [0.229, 0.224, 0.225])
-        ])
-    }
-    
-    entire_model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "entire_model")
-    model = torch.load(entire_model_path)
-        
-    # params_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "params_with_02_drop_out")
+    image_transforms =  transforms.Compose([
+        transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)),
+        transforms.RandomRotation(degrees=15),
+        transforms.RandomHorizontalFlip(),
+        transforms.CenterCrop(size=224),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])
+    ])
 
     # Set data directory paths
-    # data_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)),"data_set", "low_accuracy_many_classes")
-    data_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "classes")
+    # data_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "data_set")
+    # class_names = datasets.ImageFolder(root=data_directory, transform=image_transforms).classes
+
+        
+    # params_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resnet50_params_egyptian-monuments-and-landmarks_with_02_drop_out")
+    # resnet50.load_state_dict(torch.load(params_path,  map_location=torch.device('cpu')))
+
+    # load entire model
+    entire_model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resnet50_96acc_modified_data_entire_model.pt")
+    model =  torch.jit.load(entire_model_path,  map_location=torch.device('cpu'))
 
 
-    # class_names = datasets.ImageFolder(root=data_directory, transform=image_transforms['train']).classes
-    class_names = ['Abu_el-Abbas_el-Mursi_Mosque', 'Agiba_beach', 'Amr ibn Al-Aas Mosque', 'Babylon Fortress', 'Bent pyramid for senefru', 'Bibliotheca_Alexandrina', 'Egyptian Museum Tahrir', 'Great_Hypostyle_Hall_of_Karnak', 'Great_Pyramids_of_Giza', 'Hanging church', 'Mosque_of_al-Mahmudiya', 'Muizz_Street', 'Nefertiti', 'Pyramid_of_Djoser', 'sphinx']
+    # obj = {}
+    # for idx in range(len(class_names)):
+    #     obj[idx] = class_names[idx]
+    # print(json.dumps(obj))
 
-    # Number of classes
-    num_classes = len(class_names)
+    class_names_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "class_name.json")
+    class_names = {}
 
-    transform = image_transforms['test']
+    with open(class_names_directory, "r") as classes_json:
+        class_names = json.load(classes_json)
+
+
     test_image = Image.open(test_image_name)
-#     plt.imshow(test_image)
-    test_image_tensor = transform(test_image)
+    test_image_tensor = image_transforms(test_image)
     prediction = ""
     
     with torch.no_grad():
+        # set model in evaluation mode
         model.eval()
         # Model outputs log probabilities
         out = model(test_image_tensor.unsqueeze(0))
@@ -63,8 +54,12 @@ def predict(test_image_name):
         topk, topclass = ps.topk(1, dim=1)
 
         test_image.close()
-        prediction = class_names[topclass.cpu().numpy()[0][0]]
+        prediction = class_names[str(int(topclass[0][0]))]
+
+    prediction_data = {"class_name": prediction, "cnn_id": int(topclass[0][0]), "accuracy": float(topk[0][0])}
+    if float(topk[0][0]) < 0.7:
+        prediction_data = {"class_name": "Unknown", "cnn_id": -1, "accuracy": float(topk[0][0])}
 
     del model
     print("Output class :  ", prediction)
-    return prediction
+    return prediction_data

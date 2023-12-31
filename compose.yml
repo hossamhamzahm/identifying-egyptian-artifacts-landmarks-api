@@ -1,7 +1,9 @@
+
 services:
   gard-flask-api:
     build: .
     ports:
       - "5000:5000"
-  # db:
-  #   image: "redis:alpine"
+    environment:
+        - SUPABASE_DB_URL=postgresql://postgres:$$M_X6CzEAB.P?3v@db.lvtniondxozofixywyqq.supabase.co:5432/postgres #$SUPABASE_DB_URL
+        - PORT=5000
