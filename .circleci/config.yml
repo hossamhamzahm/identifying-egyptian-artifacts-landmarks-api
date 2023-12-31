@@ -9,7 +9,7 @@ jobs:
 
       - add_ssh_keys:
           fingerprints:
-            - "82:c7:cb:17:c7:59:2d:7b:b3:ab:db:22:e7:60:31:6c"
+            - "37:20:99:7d:02:6b:59:8c:23:56:84:ec:c1:3f:ef:c4"
       - run:
           command: ssh -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cd identifying-egyptian-artifacts-landmarks-api && git pull origin main && docker-compose down && docker-compose up"
           name: Pull & Spin
