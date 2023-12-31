@@ -11,7 +11,7 @@ jobs:
           fingerprints:
             - "37:20:99:7d:02:6b:59:8c:23:56:84:ec:c1:3f:ef:c4"
       - run:
-          command: ssh -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cd identifying-egyptian-artifacts-landmarks-api && git pull origin main && docker-compose down && docker-compose up"
+          command: ssh -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cd identifying-egyptian-artifacts-landmarks-api && git pull origin main && docker-compose down && docker-compose up -d"
           name: Pull & Spin
 
 workflows:
