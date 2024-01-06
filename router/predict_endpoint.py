@@ -17,7 +17,7 @@ def upload_image():
         # save the image in uploaded_imgs directory
         image.save(file_name)
 
-        # predice image class
+        # predict image class
         prediction_data = resnet(file_name)
 
         # remove the image
@@ -37,6 +37,7 @@ def upload_image():
     error_object = {
         "error":"Missing request body",
         "message":"Request body has no image",
+        "code": 400
     }
     return error_object, 400
 
