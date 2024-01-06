@@ -1,7 +1,7 @@
 from database import engine
 from Artifact import Artifact
 from sqlalchemy.orm import Session
-from SchemaBase import Base
+from model.SchemaBase import Base
 import os
 import json
 
