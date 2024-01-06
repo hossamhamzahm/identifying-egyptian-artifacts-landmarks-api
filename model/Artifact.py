@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy.orm import Mapped, mapped_column, Session
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import String, Integer
-from SchemaBase import Base
+from model.SchemaBase import Base
 
 
 
