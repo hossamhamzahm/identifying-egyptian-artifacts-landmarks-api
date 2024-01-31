@@ -3,9 +3,8 @@
 
 
 ### Project Idea
-An API that utilizing Siamese Network Architecture SNN with Knowledge Transfer (KT) to identify Egyptian monuments/Landmarks and provide relevant information. The API aims to enhance the tourist experience by providing tourists with historical context and relevant information about the rich cultural heritage of Egypt.
+An API utilizing Siamese Network Architecture (SNN) with Knowledge Transfer (KT) to identify Egyptian monuments/Landmarks and provide relevant information. The API aims to enhance tourists' experience by providing historical context and relevant information about the rich cultural heritage of Egypt.
 <br>
-
 
 
 <!-- #### [Frontend Application Link](https://university-schedule-generator.vercel.app) -->
