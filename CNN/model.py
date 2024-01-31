@@ -57,8 +57,8 @@ def predict(test_image_name):
         prediction = class_names[str(int(topclass[0][0]))]
 
     prediction_data = {"class_name": prediction, "cnn_id": int(topclass[0][0]), "accuracy": float(topk[0][0])}
-    if float(topk[0][0]) < 0.5:
-        prediction_data = {"class_name": "Unknown", "cnn_id": -1, "accuracy": float(topk[0][0])}
+    # if float(topk[0][0]) < 0.5:
+    #     prediction_data = {"class_name": "Unknown", "cnn_id": -1, "accuracy": float(topk[0][0])}
 
     del model
     print("Output class :  ", prediction)
